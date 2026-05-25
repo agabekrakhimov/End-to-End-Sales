@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sales Analytics Platform — Visual Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 50px;
+  }
+
+  /* ── Section heading ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ── Pipeline row ── */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .pipeline-stage {
+    flex: 0 0 180px;
+    background: #1e2330;
+    border: 1.5px solid #2d3548;
+    border-radius: 12px;
+    padding: 20px 16px;
+    position: relative;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .pipeline-stage:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+  .pipeline-stage .stage-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .pipeline-stage .stage-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .pipeline-stage .stage-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+  }
+  .pipeline-stage .stage-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+  .pipeline-stage .stage-file {
+    margin-top: 12px;
+    font-size: 10px;
+    color: #475569;
+    font-family: monospace;
+    background: #0f1117;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: block;
+    word-break: break-all;
+  }
+  .arrow {
+    flex: 0 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    font-size: 22px;
+    padding-top: 4px;
+  }
+
+  /* accent colors per stage */
+  .bronze  { --accent: #cd7f32; border-color: #3d2b1a; }
+  .silver  { --accent: #94a3b8; border-color: #2a3040; }
+  .gold    { --accent: #f59e0b; border-color: #3d3010; }
+  .python  { --accent: #3b82f6; border-color: #1a2540; }
+  .pbi     { --accent: #f59e0b; border-color: #3d2d00; background: #1e1a0f; }
+
+  /* ── Steps grid ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+  .step-card {
+    background: #1e2330;
+    border: 1.5px solid #2d3548;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--col);
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .step-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+  }
+  .step-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .step-card ul li {
+    font-size: 12px;
+    color: #94a3b8;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .step-card ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--col);
+  }
+  .step-card .step-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--col);
+    border: 1px solid var(--col);
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-top: 12px;
+  }
+
+  /* ── KPI strip ── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 50px;
+  }
+  .kpi-card {
+    background: #1e2330;
+    border: 1.5px solid #2d3548;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--col);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Dashboard pages ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 50px;
+  }
+  .dash-card {
+    background: #1c1810;
+    border: 1.5px solid #3d2d00;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .dash-card .dash-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .dash-card h3 { font-size: 13px; font-weight: 700; color: #fbbf24; margin-bottom: 6px; }
+  .dash-card p  { font-size: 11px; color: #78716c; line-height: 1.5; }
+
+  /* ── File tree ── */
+  .file-tree {
+    background: #0d1117;
+    border: 1.5px solid #21262d;
+    border-radius: 12px;
+    padding: 24px;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 2;
+    margin-bottom: 50px;
+  }
+  .ft-dir  { color: #58a6ff; font-weight: 700; }
+  .ft-py   { color: #79c0ff; }
+  .ft-sql  { color: #ff7b72; }
+  .ft-md   { color: #56d364; }
+  .ft-txt  { color: #8b949e; }
+  .ft-desc { color: #484f58; font-size: 11px; margin-left: 8px; }
+  .indent1 { padding-left: 20px; }
+  .indent2 { padding-left: 40px; }
+
+  /* ── Section wrapper ── */
+  .section { max-width: 1100px; margin: 0 auto 50px auto; }
+  hr { border: none; border-top: 1px solid #1e2330; margin: 40px 0; }
+</style>
+</head>
+<body>
+
+<h1>Sales &amp; Marketing Analytics Platform</h1>
+<p class="subtitle">Databricks + Power BI &nbsp;·&nbsp; End-to-End Pipeline Visual Guide</p>
+
+<!-- ═══════════════ PIPELINE ═══════════════ -->
+<div class="section">
+  <div class="section-title">Data Pipeline — Bronze → Silver → Gold</div>
+  <div class="pipeline">
+
+    <div class="pipeline-stage bronze">
+      <span class="stage-icon">🗂️</span>
+      <span class="stage-label">Step 1 — Bronze</span>
+      <div class="stage-name">Raw Ingest</div>
+      <div class="stage-desc">Auto Loader streams CSV/JSON files from ADLS Gen2 into Delta tables with schema inference.</div>
+      <span class="stage-file">databricks/bronze/01_ingest_raw_sales.py</span>
+    </div>
+
+    <div class="arrow">▶</div>
+
+    <div class="pipeline-stage silver">
+      <span class="stage-icon">🔍</span>
+      <span class="stage-label">Step 2 — Silver</span>
+      <div class="stage-name">Cleanse &amp; Validate</div>
+      <div class="stage-desc">DLT expectations drop bad rows. Adds gross/net revenue, discount leakage, and date-part columns.</div>
+      <span class="stage-file">databricks/silver/02_clean_transform.py</span>
+    </div>
+
+    <div class="arrow">▶</div>
+
+    <div class="pipeline-stage gold">
+      <span class="stage-icon">📊</span>
+      <span class="stage-label">Step 3 — Gold</span>
+      <div class="stage-name">Business Aggregates</div>
+      <div class="stage-desc">5 aggregated tables: monthly revenue, product perf, rep leaderboard, customer LTV, anomalies.</div>
+      <span class="stage-file">databricks/gold/03_gold_aggregations.sql</span>
+    </div>
+
+    <div class="arrow">▶</div>
+
+    <div class="pipeline-stage python">
+      <span class="stage-icon">🤖</span>
+      <span class="stage-label">Step 4 — ML</span>
+      <div class="stage-name">Anomaly Detection</div>
+      <div class="stage-desc">Z-score + Isolation Forest flags abnormal revenue days. Results emailed to leadership automatically.</div>
+      <span class="stage-file">python/anomaly_detection/anomaly_detector.py</span>
+    </div>
+
+    <div class="arrow">▶</div>
+
+    <div class="pipeline-stage pbi">
+      <span class="stage-icon">📈</span>
+      <span class="stage-label">Step 5 — BI</span>
+      <div class="stage-name">Power BI</div>
+      <div class="stage-desc">5 dashboard pages via DirectQuery. DAX measures, row-level security, bookmarks for leadership.</div>
+      <span class="stage-file">powerbi/dax_measures.md</span>
+    </div>
+
+  </div>
+</div>
+
+<hr/>
+
+<!-- ═══════════════ HOW TO RUN ═══════════════ -->
+<div class="section">
+  <div class="section-title">How to Run — Step by Step</div>
+  <div class="steps-grid">
+
+    <div class="step-card" style="--col:#cd7f32">
+      <div class="step-num" style="--col:#cd7f32">1</div>
+      <h3>Clone &amp; Upload to Databricks</h3>
+      <ul>
+        <li>Clone repo to your machine</li>
+        <li>Add to Databricks Repos (Workspace → Repos → Add)</li>
+        <li>Or import .py files directly into notebooks</li>
+      </ul>
+      <span class="step-tag">Git / Databricks</span>
+    </div>
+
+    <div class="step-card" style="--col:#e74c3c">
+      <div class="step-num" style="--col:#e74c3c">2</div>
+      <h3>Mount Your Storage</h3>
+      <ul>
+        <li>Create ADLS Gen2 storage account</li>
+        <li>Mount at <code>dbfs:/mnt/sales-datalake/</code></li>
+        <li>Upload sample CSVs to <code>/raw/transactions/</code></li>
+      </ul>
+      <span class="step-tag">Azure / ADLS Gen2</span>
+    </div>
+
+    <div class="step-card" style="--col:#3b82f6">
+      <div class="step-num" style="--col:#3b82f6">3</div>
+      <h3>Create Delta Live Tables Pipeline</h3>
+      <ul>
+        <li>Workflows → Delta Live Tables → Create</li>
+        <li>Point source to the three notebook paths</li>
+        <li>Set target schema: <code>bronze / silver / gold</code></li>
+        <li>Run once to initialize</li>
+      </ul>
+      <span class="step-tag">DLT Pipeline</span>
+    </div>
+
+    <div class="step-card" style="--col:#8b5cf6">
+      <div class="step-num" style="--col:#8b5cf6">4</div>
+      <h3>Schedule the Job</h3>
+      <ul>
+        <li>Workflows → Jobs → Create Job</li>
+        <li>Task 1: DLT pipeline</li>
+        <li>Task 2: anomaly_detector.py</li>
+        <li>Task 3: email_alerts.py</li>
+        <li>CRON: <code>0 7 * * *</code> (daily 7am)</li>
+      </ul>
+      <span class="step-tag">Databricks Jobs</span>
+    </div>
+
+    <div class="step-card" style="--col:#10b981">
+      <div class="step-num" style="--col:#10b981">5</div>
+      <h3>Set Alert Secrets</h3>
+      <ul>
+        <li>Databricks → Secrets → Create scope</li>
+        <li>Add <code>ALERT_EMAIL</code></li>
+        <li>Add <code>ALERT_PASSWORD</code> (app password)</li>
+        <li>Add <code>ALERT_RECIPIENTS</code></li>
+      </ul>
+      <span class="step-tag">Databricks Secrets</span>
+    </div>
+
+    <div class="step-card" style="--col:#f59e0b">
+      <div class="step-num" style="--col:#f59e0b">6</div>
+      <h3>Connect Power BI</h3>
+      <ul>
+        <li>Open Power BI Desktop</li>
+        <li>Get Data → Databricks → SQL Warehouse</li>
+        <li>Point to your Gold tables</li>
+        <li>Publish to Power BI Service</li>
+        <li>Set up Row-Level Security roles</li>
+      </ul>
+      <span class="step-tag">Power BI</span>
+    </div>
+
+  </div>
+</div>
+
+<hr/>
+
+<!-- ═══════════════ KPIs ═══════════════ -->
+<div class="section">
+  <div class="section-title">Impact &amp; Results</div>
+  <div class="kpi-strip">
+    <div class="kpi-card"><div class="kpi-value" style="--col:#f59e0b">−94%</div><div class="kpi-label">Reporting Time<br/>3 days → 2 hours</div></div>
+    <div class="kpi-card"><div class="kpi-value" style="--col:#ef4444">$340K</div><div class="kpi-label">Revenue Leakage<br/>Identified</div></div>
+    <div class="kpi-card"><div class="kpi-value" style="--col:#3b82f6">2.5M+</div><div class="kpi-label">Rows Processed<br/>Across 4 Sources</div></div>
+    <div class="kpi-card"><div class="kpi-value" style="--col:#10b981">0</div><div class="kpi-label">Manual Steps<br/>Fully Automated</div></div>
+    <div class="kpi-card"><div class="kpi-value" style="--col:#8b5cf6">5</div><div class="kpi-label">Dashboard Pages<br/>Power BI</div></div>
+    <div class="kpi-card"><div class="kpi-value" style="--col:#06b6d4">40+</div><div class="kpi-label">Dashboard Users<br/>Leadership + Sales</div></div>
+  </div>
+</div>
+
+<hr/>
+
+<!-- ═══════════════ DASHBOARDS ═══════════════ -->
+<div class="section">
+  <div class="section-title">Power BI Dashboard Pages</div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <span class="dash-icon">💰</span>
+      <h3>Executive Revenue Overview</h3>
+      <p>YoY bar chart, running total line, revenue vs target gauge, MoM change KPIs</p>
+    </div>
+    <div class="dash-card">
+      <span class="dash-icon">📦</span>
+      <h3>Product Performance</h3>
+      <p>Top/bottom SKU table, category revenue treemap, avg selling price trend</p>
+    </div>
+    <div class="dash-card">
+      <span class="dash-icon">🏆</span>
+      <h3>Sales Rep Leaderboard</h3>
+      <p>Revenue rank table, discount behaviour heatmap, quota attainment bars</p>
+    </div>
+    <div class="dash-card">
+      <span class="dash-icon">👥</span>
+      <h3>Customer LTV &amp; RFM</h3>
+      <p>RFM segment donut (Champions / Loyal / At Risk / Lost), LTV scatter, country map</p>
+    </div>
+    <div class="dash-card">
+      <span class="dash-icon">🚨</span>
+      <h3>Anomaly Monitor</h3>
+      <p>Flagged-day timeline, Z-score bars, region filter, ML vs rule-based comparison</p>
+    </div>
+  </div>
+</div>
+
+<hr/>
+
+<!-- ═══════════════ FILE TREE ═══════════════ -->
+<div class="section">
+  <div class="section-title">Repository File Map</div>
+  <div class="file-tree">
+    <div><span class="ft-dir">End-to-End-Sales/</span></div>
+    <div class="indent1"><span class="ft-dir">databricks/</span></div>
+    <div class="indent2"><span class="ft-dir">bronze/</span></div>
+    <div class="indent2" style="padding-left:60px"><span class="ft-py">01_ingest_raw_sales.py</span><span class="ft-desc">← Auto Loader + DLT Bronze</span></div>
+    <div class="indent2"><span class="ft-dir">silver/</span></div>
+    <div class="indent2" style="padding-left:60px"><span class="ft-py">02_clean_transform.py</span><span class="ft-desc">← DLT expectations, derived cols</span></div>
+    <div class="indent2"><span class="ft-dir">gold/</span></div>
+    <div class="indent2" style="padding-left:60px"><span class="ft-sql">03_gold_aggregations.sql</span><span class="ft-desc">← 5 business aggregate tables</span></div>
+    <div class="indent1"><span class="ft-dir">python/</span></div>
+    <div class="indent2"><span class="ft-dir">anomaly_detection/</span></div>
+    <div class="indent2" style="padding-left:60px"><span class="ft-py">anomaly_detector.py</span><span class="ft-desc">← Z-score + Isolation Forest</span></div>
+    <div class="indent2"><span class="ft-dir">alerts/</span></div>
+    <div class="indent2" style="padding-left:60px"><span class="ft-py">email_alerts.py</span><span class="ft-desc">← HTML email notifications</span></div>
+    <div class="indent1"><span class="ft-dir">powerbi/</span></div>
+    <div class="indent2"><span class="ft-md">dax_measures.md</span><span class="ft-desc">← All DAX formulas documented</span></div>
+    <div class="indent1"><span class="ft-dir">docs/</span></div>
+    <div class="indent2"><span class="ft-md">architecture.md</span><span class="ft-desc">← ASCII diagram + SLA table</span></div>
+    <div class="indent2"><span class="ft-md">visual-guide.html</span><span class="ft-desc">← This file</span></div>
+    <div class="indent1"><span class="ft-txt">requirements.txt</span></div>
+    <div class="indent1"><span class="ft-md">README.md</span></div>
+  </div>
+</div>
+
+</body>
+</html>
